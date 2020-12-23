@@ -34,7 +34,7 @@ var (
 
 	BSCGenesisHash    = common.HexToHash("0x0d21840abff46b96c84b2ac9e10e4f5cdaeb5693cb665db62a2f3b02d2d57b5b")
 	ChapelGenesisHash = common.HexToHash("0x6d3c66c5357ec91d5c43af47e234a939b22557cbb552dc45bebbceeed90fbe34")
-	RialtoGenesisHash = common.HexToHash("0xaa1c1e0af675e846942719466ab72822eff51ebf8462ead0897ae1240e3c0da1")
+	RialtoGenesisHash = common.HexToHash("0x005dc005bddd1967de6187c1c23be801eb7abdd80cebcc24f341b727b70311d6")
 )
 
 // TrustedCheckpoints associates each known checkpoint with the genesis hash of
@@ -265,9 +265,9 @@ var (
 		PetersburgBlock:     big.NewInt(0),
 		IstanbulBlock:       big.NewInt(0),
 		MuirGlacierBlock:    big.NewInt(0),
-		RamanujanBlock:      big.NewInt(400),
+		RamanujanBlock:      big.NewInt(50),
 		NielsBlock:          big.NewInt(0),
-		MirrorSyncBlock:     big.NewInt(1000),
+		MirrorSyncBlock:     big.NewInt(100),
 		Parlia: &ParliaConfig{
 			Period: 3,
 			Epoch:  200,
@@ -558,6 +558,7 @@ func (c *ChainConfig) CheckConfigForkOrder() error {
 		{"istanbulBlock", c.IstanbulBlock},
 		{"muirGlacierBlock", c.MuirGlacierBlock},
 		{"ramanujanBlock", c.RamanujanBlock},
+		{"mirrorSyncBlock", c.MirrorSyncBlock},
 	} {
 		if lastFork.name != "" {
 			// Next one must be higher number
@@ -619,6 +620,9 @@ func (c *ChainConfig) checkCompatible(newcfg *ChainConfig, head *big.Int) *Confi
 	}
 	if isForkIncompatible(c.RamanujanBlock, newcfg.RamanujanBlock, head) {
 		return newCompatError("ramanujan fork block", c.RamanujanBlock, newcfg.RamanujanBlock)
+	}
+	if isForkIncompatible(c.MirrorSyncBlock, newcfg.MirrorSyncBlock, head) {
+		return newCompatError("mirrorSync fork block", c.MirrorSyncBlock, newcfg.MirrorSyncBlock)
 	}
 	return nil
 }
